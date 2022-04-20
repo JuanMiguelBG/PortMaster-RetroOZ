@@ -1,0 +1,140 @@
+# This file can and should be sourced by ports for various parameters to 
+# minimize script customizations and allow for easier future updates
+# like adding additional supported devices.
+# Thanks to JohnnyonFlame, dhwz, romadu, and shantigilbert for the 
+# suggestion and assistance with this.
+# Source used for gptokeyb available at
+# https://github.com/christianhaitian/gptokeyb
+# Source used for oga_controls available at
+# https://github.com/christianhaitian/oga_controls
+
+if [ -f "/opt/system/Advanced/Switch to main SD for Roms.sh" ]; then
+  directory="roms2"
+else
+  directory="roms"
+fi
+
+if [ -f "/etc/os-release" ]; then
+  source /etc/os-release
+fi
+
+if [ -d "/PortMaster/" ]; then
+  controlfolder="/PortMaster"
+elif [ -d "/opt/system/Tools/PortMaster/" ]; then
+  controlfolder="/opt/system/Tools/PortMaster"
+elif [ -d "/opt/tools/PortMaster/" ]; then
+  controlfolder="/opt/tools/PortMaster"
+else
+  controlfolder="/$directory/ports/PortMaster"
+fi
+
+sudo echo "PortMaster::controls.txt - Testing for sudo..."
+if [ $? != 0 ]; then
+  echo "No sudo present."
+  ESUDO=""
+  ESUDOKILL="-1" # for 351Elec and EmuELEC use "-1" (numeric one) or "-k" 
+else
+  ESUDO="sudo"
+  ESUDOKILL="-sudokill" # for ArkOS, RetroOZ, and TheRA use "-sudokill"
+fi
+
+export SDL_GAMECONTROLLERCONFIG_FILE="$controlfolder/gamecontrollerdb.txt"
+
+echo "PortMaster::controls.txt - SDL_GAMECONTROLLERCONFIG_FILE: $SDL_GAMECONTROLLERCONFIG_FILE"
+
+is_ArkOS=0
+is_RetroOZ=0
+if [ "$(cat ~/.config/.OS)" == "ArkOS" ]; then
+  is_ArkOS=1
+elif [[ -e "/usr/share/plymouth/themes/text.plymouth" ]]; then
+  so_name=$(grep "title=" /usr/share/plymouth/themes/text.plymouth)
+  if [[ $so_name == *"ArkOS"* ]]; then
+    is_ArkOS=1
+  elif [[ $so_name == *"RetroOZ"* ]]; then
+    is_RetroOZ=1
+  fi
+
+fi
+
+SDLDBFILE="${SDL_GAMECONTROLLERCONFIG_FILE}"
+[ -z "${SDLDBFILE}" ] && SDLDBFILE="${controlfolder}/gamecontrollerdb.txt"
+SDLDBUSERFILE="${HOME}/.config/SDL-GameControllerDB/gamecontrollerdb.txt"
+
+param_device=""
+sdl_controllerconfig=""
+
+get_controls() {
+
+ANALOGSTICKS="2"
+LOWRES="N"
+
+if [[ -e "/dev/input/by-path/platform-ff300000.usb-usb-0:1.2:1.0-event-joystick" ]]; then
+      DEVICE="03000000091200000031000011010000"
+      param_device="anbernic"
+      LOWRES="Y"
+      if [ -f "/boot/rk3326-rg351v-linux.dtb" ] || [ $(cat "/storage/.config/.OS_ARCH") == "RG351V" ]; then
+        ANALOGSTICKS="1"
+        LOWRES="N"
+      fi
+elif [[ -e "/dev/input/by-path/platform-odroidgo2-joypad-event-joystick" ]]; then
+      if [[ ! -z $(cat /etc/emulationstation/es_input.cfg | grep "190000004b4800000010000001010000") ]]; then
+        DEVICE="190000004b4800000010000001010000"
+        param_device="oga"
+        export HOTKEY="l3"
+      else
+        DEVICE="190000004b4800000010000000010000"
+        param_device="rk2020"
+      fi
+      ANALOGSTICKS=1
+      LOWRES="Y"
+elif [[ -e "/dev/input/by-path/platform-odroidgo3-joypad-event-joystick" ]]; then
+      DEVICE="190000004b4800000011000000010000"
+      param_device="ogs"
+      if [ "$is_ArkOS" -eq 1 ] && [ "$(cat ~/.config/.DEVICE)" == "RGB10MAX" ]; then
+        sed -i 's/back:b12,guide:b16,start:b13/back:b14,guide:b12,start:b15/' ${controlfolder}/gamecontrollerdb.txt
+        export HOTKEY="guide"
+      fi
+      if [ "$is_RetroOZ" -eq 1 ] && [[ -e "/opt/.retrooz/device" ]]; then
+        param_device="$(cat /opt/.retrooz/device)"
+        echo "PortMaster::controls.txt::get_controls() - RetroOZ device: $param_device"
+        if [[ ! -f "${controlfolder}/gamecontrollerdb.txt.backup" ]]; then
+          cp ${controlfolder}/gamecontrollerdb.txt ${controlfolder}/gamecontrollerdb.txt.backup
+        fi
+        if [[ "$param_device" == *"rgb10maxnative"* ]] || [[ "$param_device" == *"rgb10max2native"* ]]; then
+          sed -i 's/back:b12/back:b14/; s/guide:b16/guide:b12/; s/guide:b14/guide:b12/; s/start:b13/start:b15/; s/leftstick:b14/leftstick:b16/; s/rightstick:b15/rightstick:b17/' ${controlfolder}/gamecontrollerdb.txt
+        elif [[ "$param_device" == *"rgb10maxtop"* ]] || [[ "$param_device" == *"rgb10max2top"* ]]; then
+          sed -i 's/back:b14/back:b12/; s/guide:b12/guide:b14/; s/guide:b16/guide:b14/; s/start:b15/start:b13/; s/leftstick:b14/leftstick:b16/; s/rightstick:b15/rightstick:b17/' ${controlfolder}/gamecontrollerdb.txt
+        elif [[ "$param_device" == *"ogs"* ]]; then
+          sed -i 's/back:b14/back:b12/; s/guide:b12/guide:b16/; s/guide:b14/guide:b16/; s/start:b15/start:b13/; s/leftstick:b16/leftstick:b14/; s/rightstick:b17/rightstick:b15/' ${controlfolder}/gamecontrollerdb.txt
+        fi
+      fi
+elif [[ -e "/dev/input/by-path/platform-gameforce-gamepad-event-joystick" ]]; then
+      DEVICE="19000000030000000300000002030000"
+      param_device="chi"
+      export HOTKEY="l3"
+elif [[ -e "/dev/input/by-path/platform-singleadc-joypad-event-joystick" ]]; then
+      DEVICE="190000004b4800000111000000010000"
+      param_device="rg552"
+      LOWRES="N"
+else
+      DEVICE="${1}"
+      param_device="${2}"
+fi
+
+    CONTROLS=`grep "${SDLDBUSERFILE}" -e "${DEVICE}"`
+    [ -z "${CONTROLS}" ] && CONTROLS=`grep "${SDLDBFILE}" -e "${DEVICE}"`
+    sdl_controllerconfig="${CONTROLS}"
+
+    echo "PortMaster::controls.txt::get_controls() - sdl_controllerconfig: $sdl_controllerconfig"
+    echo "PortMaster::controls.txt::get_controls() - device: $param_device"
+}
+
+oga_events="oga_events"
+if [ "$is_RetroOZ" -eq 1 ]; then
+  GPTOKEYB="$ESUDO $controlfolder/gptokeyb $ESUDOKILL"
+  oga_events="ogs_events"
+else
+  GPTOKEYB="$controlfolder/gptokeyb $ESUDOKILL"
+fi
+
+echo "PortMaster::controls.txt - oga_events: $oga_events"
