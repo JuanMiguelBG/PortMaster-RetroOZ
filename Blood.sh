@@ -1,8 +1,8 @@
 #!/bin/bash
 
-PORT_LOG_FILE="/roms/logs/am2r.log"
+PORT_LOG_FILE="/roms/logs/blood.log"
 
-echo "AM2R: " | tee $PORT_LOG_FILE
+echo "Blood: " | tee $PORT_LOG_FILE
 
 if [ -d "/opt/system/Tools/PortMaster/" ]; then
   controlfolder="/opt/system/Tools/PortMaster"
@@ -18,10 +18,14 @@ source $controlfolder/control.txt >> $PORT_LOG_FILE 2>&1
 
 get_controls >> $PORT_LOG_FILE 2>&1
 
-export LD_LIBRARY_PATH=/$directory/ports/am2r/libs:/usr/lib:/usr/lib32
-$ESUDO rm -rf ~/.config/am2r
-ln -sfv /$directory/ports/am2r/conf/am2r/ ~/.config/
-cd /$directory/ports/am2r
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/storage/roms/ports/Blood/lib:/usr/lib"
+GAMEDIR="/$directory/ports/Blood"
+
+GPTOKEYB_CONFIG="$GAMEDIR/nblood.gptk"
+
+$ESUDO rm -rf ~/.config/nblood
+$ESUDO ln -s $GAMEDIR/conf/nblood ~/.config/
+cd $GAMEDIR
 
 $ESUDO chmod 666 /dev/tty1
 $ESUDO chmod 666 /dev/uinput
@@ -32,10 +36,10 @@ if [ "$is_RetroOZ" -eq 1 ]; then
   echo "gptokeyb_params: $gptokeyb_params" | tee -a $PORT_LOG_FILE
 fi
 
-echo "GPTOKEYB command: $GPTOKEYB \"gmloader\" -c \"./am2r.gptk\" $gptokeyb_params 2>&1 | tee -a $PORT_LOG_FILE &" | tee -a $PORT_LOG_FILE
-$GPTOKEYB "gmloader" -c "./am2r.gptk" $gptokeyb_params 2>&1 | tee -a $PORT_LOG_FILE &
-echo "Launch command: ./gmloader gamedata/am2r.apk 2>&1 | tee -a $PORT_LOG_FILE" | tee -a $PORT_LOG_FILE
-./gmloader gamedata/am2r.apk 2>&1 | tee -a $PORT_LOG_FILE
+echo "GPTOKEYB command: $GPTOKEYB \"nblood\" -c $GPTOKEYB_CONFIG $gptokeyb_params 2>&1 | tee -a $PORT_LOG_FILE &" | tee -a $PORT_LOG_FILE
+$GPTOKEYB "nblood" -c $GPTOKEYB_CONFIG $gptokeyb_params 2>&1 | tee -a $PORT_LOG_FILE &
+echo "Launch command: ./nblood 2>&1 | tee -a $PORT_LOG_FILE" | tee -a $PORT_LOG_FILE
+./nblood 2>&1 | tee -a $PORT_LOG_FILE
 
 $ESUDO kill -9 $(pidof gptokeyb)
 $ESUDO systemctl restart $oga_events &
@@ -44,5 +48,5 @@ unset LD_LIBRARY_PATH
 unset SDL_GAMECONTROLLERCONFIG
 unset SDL_GAMECONTROLLERCONFIG_FILE
 
-printf "\n\nExiting AM2R\n\n" | tee -a $PORT_LOG_FILE
-printf "\033c" > /dev/tty1
+printf "\n\nExiting Blood\n\n" | tee -a $PORT_LOG_FILE
+printf "\033c" >> /dev/tty1

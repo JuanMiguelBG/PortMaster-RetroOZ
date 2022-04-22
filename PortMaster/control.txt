@@ -46,12 +46,17 @@ is_ArkOS=0
 is_RetroOZ=0
 if [ "$(cat ~/.config/.OS)" == "ArkOS" ]; then
   is_ArkOS=1
+  echo "PortMaster::controls.txt - Operating System: ArkOS"
 elif [[ -e "/usr/share/plymouth/themes/text.plymouth" ]]; then
   so_name=$(grep "title=" /usr/share/plymouth/themes/text.plymouth)
   if [[ $so_name == *"ArkOS"* ]]; then
     is_ArkOS=1
+  echo "PortMaster::controls.txt - Operating System: ArkOS"
   elif [[ $so_name == *"RetroOZ"* ]]; then
     is_RetroOZ=1
+    echo "PortMaster::controls.txt - Operating System: RetroOZ"
+  else
+    echo "PortMaster::controls.txt - Operating System: $so_name"
   fi
 
 fi
@@ -124,6 +129,7 @@ fi
     CONTROLS=`grep "${SDLDBUSERFILE}" -e "${DEVICE}"`
     [ -z "${CONTROLS}" ] && CONTROLS=`grep "${SDLDBFILE}" -e "${DEVICE}"`
     sdl_controllerconfig="${CONTROLS}"
+    sdl_controllerconfig=${sdl_controllerconfig/ /_}
 
     echo "PortMaster::controls.txt::get_controls() - sdl_controllerconfig: $sdl_controllerconfig"
     echo "PortMaster::controls.txt::get_controls() - device: $param_device"
@@ -131,7 +137,7 @@ fi
 
 oga_events="oga_events"
 if [ "$is_RetroOZ" -eq 1 ]; then
-  GPTOKEYB="$ESUDO $controlfolder/gptokeyb $ESUDOKILL"
+  GPTOKEYB="$ESUDO $controlfolder/gptokeyb   $ESUDOKILL"
   oga_events="ogs_events"
 else
   GPTOKEYB="$controlfolder/gptokeyb $ESUDOKILL"
