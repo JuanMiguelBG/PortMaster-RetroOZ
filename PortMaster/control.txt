@@ -34,7 +34,7 @@ if [ $? != 0 ]; then
   ESUDO=""
   ESUDOKILL="-1" # for 351Elec and EmuELEC use "-1" (numeric one) or "-k" 
 else
-  ESUDO="sudo"
+  ESUDO="sudo --preserve-env=SDL_GAMECONTROLLERCONFIG_FILE,DEVICE,param_device,HOTKEY,ANALOGSTICKS"
   ESUDOKILL="-sudokill" # for ArkOS, RetroOZ, and TheRA use "-sudokill"
 fi
 
@@ -58,7 +58,6 @@ elif [[ -e "/usr/share/plymouth/themes/text.plymouth" ]]; then
   else
     echo "PortMaster::controls.txt - Operating System: $so_name"
   fi
-
 fi
 
 SDLDBFILE="${SDL_GAMECONTROLLERCONFIG_FILE}"
@@ -137,10 +136,10 @@ fi
 
 oga_events="oga_events"
 if [ "$is_RetroOZ" -eq 1 ]; then
-  GPTOKEYB="$ESUDO $controlfolder/gptokeyb   $ESUDOKILL"
   oga_events="ogs_events"
-else
-  GPTOKEYB="$controlfolder/gptokeyb $ESUDOKILL"
 fi
 
+GPTOKEYB="$ESUDO $controlfolder/gptokeyb $ESUDOKILL"
+
 echo "PortMaster::controls.txt - oga_events: $oga_events"
+echo "PortMaster::controls.txt - GPTOKEYB: $GPTOKEYB"
