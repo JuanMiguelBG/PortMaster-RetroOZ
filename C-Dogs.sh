@@ -64,5 +64,4 @@ unset SDL_GAMECONTROLLERCONFIG
 unset SDL_GAMECONTROLLERCONFIG_FILE
 
 printf "\n\nExiting C-Dogs\n\n" | tee -a $PORT_LOG_FILE
-
 printf "\033c" > /dev/tty1
