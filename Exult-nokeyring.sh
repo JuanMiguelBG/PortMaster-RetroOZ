@@ -24,14 +24,8 @@ cd $GAMEDIR
 $ESUDO chmod 666 /dev/tty1
 $ESUDO chmod 666 /dev/uinput
 
-gptokeyb_params=""
-if [ "$is_RetroOZ" -eq 1 ]; then
-  gptokeyb_params="$param_device -ccf $SDL_GAMECONTROLLERCONFIG_FILE"
-  echo "gptokeyb_params: $gptokeyb_params" | tee -a $PORT_LOG_FILE
-fi
-
-echo "GPTOKEYB command: $GPTOKEYB \"exult\" $HOTKEY -c \"./exult.$ANALOGSTICKS.gptk\" $gptokeyb_params 2>&1 | tee -a $PORT_LOG_FILE &" | tee -a $PORT_LOG_FILE
-$GPTOKEYB "exult" $HOTKEY -c "./exult.$ANALOGSTICKS.gptk" $gptokeyb_params 2>&1 | tee -a $PORT_LOG_FILE &
+echo "GPTOKEYB command: $GPTOKEYB \"exult\" $HOTKEY -c \"./exult.$ANALOGSTICKS.gptk\" &" | tee -a $PORT_LOG_FILE
+$GPTOKEYB "exult" $HOTKEY -c "./exult.$ANALOGSTICKS.gptk" &
 echo "Launch command: LD_LIBRARY_PATH=\"$PWD/libs\" ./exult -c \"$PWD/exult.nokeyring.cfg\" 2>&1 | tee -a $PORT_LOG_FILE" | tee -a $PORT_LOG_FILE
 LD_LIBRARY_PATH="$PWD/libs" ./exult -c "$PWD/exult.nokeyring.cfg" 2>&1 | tee -a $PORT_LOG_FILE
 

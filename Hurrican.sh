@@ -56,14 +56,8 @@ ln -sfv /${CONFIGFOLDER}/conf/hurrican/ ~/.config/
 $ESUDO rm -rf ~/.local/share/hurrican
 ln -sfv /${CONFIGFOLDER}/highscores/hurrican/ ~/.local/share/
 
-gptokeyb_params=""
-if [ "$is_RetroOZ" -eq 1 ]; then
-  gptokeyb_params="$param_device -ccm \"$sdl_controllerconfig\""
-  echo "gptokeyb_params: $gptokeyb_params" | tee -a $PORT_LOG_FILE
-fi
-
-echo "GPTOKEYB command: $GPTOKEYB \"hurrican\" -c \"./hurrican.gptk\" $gptokeyb_params 2>&1 | tee -a $PORT_LOG_FILE &" | tee -a $PORT_LOG_FILE
-$GPTOKEYB "hurrican" -c "./hurrican.gptk" $gptokeyb_params 2>&1 | tee -a $PORT_LOG_FILE &
+echo "GPTOKEYB command: $GPTOKEYB \"hurrican\" -c \"./hurrican.gptk\" &" | tee -a $PORT_LOG_FILE
+$GPTOKEYB "hurrican" -c "./hurrican.gptk" &
 echo "Launch command: SDL_GAMECONTROLLERCONFIG=\"$sdl_controllerconfig\" ./hurrican --depth 16 2>&1 | tee -a $PORT_LOG_FILE" | tee -a $PORT_LOG_FILE
 SDL_GAMECONTROLLERCONFIG="$sdl_controllerconfig" ./hurrican --depth 16 2>&1 | tee -a $PORT_LOG_FILE
 

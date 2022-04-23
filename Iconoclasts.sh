@@ -70,8 +70,6 @@ fi
 
 gptokeyb_params=""
 if [ "$is_RetroOZ" -eq 1 ]; then
-  gptokeyb_params="$param_device -ccm \"$sdl_controllerconfig\""
-  echo "gptokeyb_params: $gptokeyb_params" | tee -a $PORT_LOG_FILE
   export LD_LIBRARY_PATH=$GAMEDIR/box86/lib:/usr/lib32:$GAMEDIR/box86/native
   export BOX86_LD_LIBRARY_PATH=$GAMEDIR/box86/lib:$GAMEDIR/box86/native:/usr/lib32/:./:lib/:lib32/:x86/
 else

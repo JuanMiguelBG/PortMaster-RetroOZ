@@ -49,14 +49,8 @@ ln -sfv /${CONFIGFOLDER}/save/fheroes2/ ~/.local/share/
 $ESUDO chmod 666 /dev/tty1
 $ESUDO chmod 666 /dev/uinput
 
-gptokeyb_params=""
-if [ "$is_RetroOZ" -eq 1 ]; then
-  gptokeyb_params="$param_device -ccm \"$sdl_controllerconfig\""
-  echo "gptokeyb_params: $gptokeyb_params" | tee -a $PORT_LOG_FILE
-fi
-
-echo "GPTOKEYB command: $GPTOKEYB \"fheroes2\" $gptokeyb_params 2>&1 | tee -a $PORT_LOG_FILE &" | tee -a $PORT_LOG_FILE
-$GPTOKEYB "fheroes2" $gptokeyb_params 2>&1 | tee -a $PORT_LOG_FILE &
+echo "GPTOKEYB command: $GPTOKEYB \"fheroes2\" &" | tee -a $PORT_LOG_FILE
+$GPTOKEYB "fheroes2" &
 echo "Launch command: SDL_GAMECONTROLLERCONFIG=\"$sdl_controllerconfig\" ./fheroes2 2>&1 | tee -a $PORT_LOG_FILE" | tee -a $PORT_LOG_FILE
 SDL_GAMECONTROLLERCONFIG="$sdl_controllerconfig" ./fheroes2 2>&1 | tee -a $PORT_LOG_FILE
 

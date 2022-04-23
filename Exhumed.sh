@@ -49,14 +49,8 @@ export TEXTINPUTINTERACTIVE="Y"
 $ESUDO chmod 666 /dev/tty1
 $ESUDO chmod 666 /dev/uinput
 
-gptokeyb_params=""
-if [ "$is_RetroOZ" -eq 1 ]; then
-  gptokeyb_params="$param_device -ccm \"$sdl_controllerconfig\""
-  echo "gptokeyb_params: $gptokeyb_params" | tee -a $PORT_LOG_FILE
-fi
-
-echo "GPTOKEYB command: $GPTOKEYB \"pcexhumed\" -c \"./pcexhumed.gptk\" $gptokeyb_params 2>&1 | tee -a $PORT_LOG_FILE &" | tee -a $PORT_LOG_FILE
-$GPTOKEYB "pcexhumed" -c "./pcexhumed.gptk" $gptokeyb_params 2>&1 | tee -a $PORT_LOG_FILE &
+echo "GPTOKEYB command: $GPTOKEYB \"pcexhumed\" -c \"./pcexhumed.gptk\" &" | tee -a $PORT_LOG_FILE
+$GPTOKEYB "pcexhumed" -c "./pcexhumed.gptk" &
 echo "Launch command: LD_LIBRARY_PATH=./lib:$LD_LIBRARY_PATH SDL_GAMECONTROLLERCONFIG=\"$sdl_controllerconfig\" ./pcexhumed 2>&1 | tee -a $PORT_LOG_FILE" | tee -a $PORT_LOG_FILE
 LD_LIBRARY_PATH=./lib:$LD_LIBRARY_PATH SDL_GAMECONTROLLERCONFIG="$sdl_controllerconfig" ./pcexhumed 2>&1 | tee -a $PORT_LOG_FILE
 

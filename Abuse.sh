@@ -28,7 +28,7 @@ if [[ -e "/dev/input/by-path/platform-ff300000.usb-usb-0:1.2:1.0-event-joystick"
   sed -i '/ctr_left_stick_aim\=1/s//ctr_left_stick_aim\=0/' $GAMEDIR/user/config.txt
 elif [[ -e "/dev/input/by-path/platform-odroidgo2-joypad-event-joystick" ]]; then
     GPTOKEYB_CONFIG="abuse.gptk.leftanalog" # it's also necessary to modify ./user/config.txt ctr_left_stick_aim=1 to enable left stick aiming
-	sed -i '/ctr_left_stick_aim\=0/s//ctr_left_stick_aim\=1/' $GAMEDIR/user/config.txt
+  sed -i '/ctr_left_stick_aim\=0/s//ctr_left_stick_aim\=1/' $GAMEDIR/user/config.txt
 elif [[ -e "/dev/input/by-path/platform-odroidgo3-joypad-event-joystick" ]]; then
   sed -i '/ctr_left_stick_aim\=1/s//ctr_left_stick_aim\=0/' $GAMEDIR/user/config.txt
 else
@@ -48,14 +48,8 @@ ln -sfv /$GAMEDIR/conf/.abuse ~/
 $ESUDO chmod 666 /dev/tty1
 $ESUDO chmod 666 /dev/uinput
 
-gptokeyb_params=""
-if [ "$is_RetroOZ" -eq 1 ]; then
-  gptokeyb_params="$param_device -ccm \"$sdl_controllerconfig\""
-  echo "gptokeyb_params: $gptokeyb_params" | tee -a $PORT_LOG_FILE
-fi
-
-echo "GPTOKEYB command: $GPTOKEYB \"abuse\" -c \"$GAMEDIR/$GPTOKEYB_CONFIG\" $gptokeyb_params 2>&1 | tee -a $PORT_LOG_FILE &" | tee -a $PORT_LOG_FILE
-$GPTOKEYB "abuse" -c "$GAMEDIR/$GPTOKEYB_CONFIG" $gptokeyb_params 2>&1 | tee -a $PORT_LOG_FILE &
+echo "GPTOKEYB command: $GPTOKEYB \"abuse\" -c \"$GAMEDIR/$GPTOKEYB_CONFIG\" &" | tee -a $PORT_LOG_FILE
+$GPTOKEYB "abuse" -c "$GAMEDIR/$GPTOKEYB_CONFIG" &
 echo "Launch command: SDL_GAMECONTROLLERCONFIG=\"$sdl_controllerconfig\" ./abuse 2>&1 | tee -a $PORT_LOG_FILE" | tee -a $PORT_LOG_FILE
 SDL_GAMECONTROLLERCONFIG="$sdl_controllerconfig" ./abuse 2>&1 | tee -a $PORT_LOG_FILE
 $ESUDO kill -9 $(pidof gptokeyb)

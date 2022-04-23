@@ -26,14 +26,8 @@ ln -sfv /$directory/ports/blobbyvolley2/conf/.blobby ~/
 $ESUDO chmod 666 /dev/tty1
 $ESUDO chmod 666 /dev/uinput
 
-gptokeyb_params=""
-if [ "$is_RetroOZ" -eq 1 ]; then
-  gptokeyb_params="$param_device -ccm \"$sdl_controllerconfig\""
-  echo "gptokeyb_params: $gptokeyb_params" | tee -a $PORT_LOG_FILE
-fi
-
-echo "GPTOKEYB command: $GPTOKEYB \"blobby\" -c \"./blobby.gptk.$ANALOGSTICKS\" $gptokeyb_params 2>&1 | tee -a $PORT_LOG_FILE &" | tee -a $PORT_LOG_FILE
-$GPTOKEYB "blobby" -c "./blobby.gptk.$ANALOGSTICKS" $gptokeyb_params 2>&1 | tee -a $PORT_LOG_FILE &
+echo "GPTOKEYB command: $GPTOKEYB \"blobby\" -c \"./blobby.gptk.$ANALOGSTICKS\" &" | tee -a $PORT_LOG_FILE
+$GPTOKEYB "blobby" -c "./blobby.gptk.$ANALOGSTICKS" &
 echo "Launch command: LD_LIBRARY_PATH=\"$PWD/libs\" SDL_GAMECONTROLLERCONFIG=\"$sdl_controllerconfig\" ./blobby 2>&1 | tee -a $PORT_LOG_FILE" | tee -a $PORT_LOG_FILE
 LD_LIBRARY_PATH="$PWD/libs" SDL_GAMECONTROLLERCONFIG="$sdl_controllerconfig" ./blobby 2>&1 | tee -a $PORT_LOG_FILE
 
