@@ -36,6 +36,7 @@ export BOX86_FORCE_ES=31
 
 if [ ! -f "$GAMEDIR/gamedata/freedomplanet/bin32/oga_controls" ]; then
   cp -f $GAMEDIR/oga_controls* .
+  rm -f ./gamecontrollerdb.txt
   cp -f $controlfolder/gamecontrollerdb.txt .
 fi
 
