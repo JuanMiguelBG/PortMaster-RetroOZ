@@ -56,8 +56,8 @@ ln -sfv /${CONFIGFOLDER}/conf/hurrican/ ~/.config/
 $ESUDO rm -rf ~/.local/share/hurrican
 ln -sfv /${CONFIGFOLDER}/highscores/hurrican/ ~/.local/share/
 
-echo "GPTOKEYB command: $GPTOKEYB \"hurrican\" -c \"./hurrican.gptk\" &" | tee -a $PORT_LOG_FILE
-$GPTOKEYB "hurrican" -c "./hurrican.gptk" &
+echo "GPTOKEYB command: $GPTOKEYB \"hurrican\" -c \"./hurrican.gptk\" 2>&1 | tee -a $PORT_LOG_FILE &" | tee -a $PORT_LOG_FILE
+$GPTOKEYB "hurrican" -c "./hurrican.gptk" 2>&1 | tee -a $PORT_LOG_FILE &
 echo "Launch command: SDL_GAMECONTROLLERCONFIG=\"$sdl_controllerconfig\" ./hurrican --depth 16 2>&1 | tee -a $PORT_LOG_FILE" | tee -a $PORT_LOG_FILE
 SDL_GAMECONTROLLERCONFIG="$sdl_controllerconfig" ./hurrican --depth 16 2>&1 | tee -a $PORT_LOG_FILE
 

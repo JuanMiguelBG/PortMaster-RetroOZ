@@ -49,8 +49,8 @@ export TEXTINPUTINTERACTIVE="Y"
 $ESUDO chmod 666 /dev/tty1
 $ESUDO chmod 666 /dev/uinput
 
-echo "GPTOKEYB command: $GPTOKEYB \"pcexhumed\" -c \"./pcexhumed.gptk\" &" | tee -a $PORT_LOG_FILE
-$GPTOKEYB "pcexhumed" -c "./pcexhumed.gptk" &
+echo "GPTOKEYB command: $GPTOKEYB \"pcexhumed\" -c \"./pcexhumed.gptk\" 2>&1 | tee -a $PORT_LOG_FILE &" | tee -a $PORT_LOG_FILE
+$GPTOKEYB "pcexhumed" -c "./pcexhumed.gptk" 2>&1 | tee -a $PORT_LOG_FILE &
 echo "Launch command: LD_LIBRARY_PATH=./lib:$LD_LIBRARY_PATH SDL_GAMECONTROLLERCONFIG=\"$sdl_controllerconfig\" ./pcexhumed 2>&1 | tee -a $PORT_LOG_FILE" | tee -a $PORT_LOG_FILE
 LD_LIBRARY_PATH=./lib:$LD_LIBRARY_PATH SDL_GAMECONTROLLERCONFIG="$sdl_controllerconfig" ./pcexhumed 2>&1 | tee -a $PORT_LOG_FILE
 

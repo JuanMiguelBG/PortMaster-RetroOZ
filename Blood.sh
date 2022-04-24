@@ -30,8 +30,8 @@ cd $GAMEDIR
 $ESUDO chmod 666 /dev/tty1
 $ESUDO chmod 666 /dev/uinput
 
-echo "GPTOKEYB command: $GPTOKEYB \"nblood\" -c $GPTOKEYB_CONFIG &" | tee -a $PORT_LOG_FILE
-$GPTOKEYB "nblood" -c $GPTOKEYB_CONFIG &
+echo "GPTOKEYB command: $GPTOKEYB \"nblood\" -c $GPTOKEYB_CONFIG 2>&1 | tee -a $PORT_LOG_FILE &" | tee -a $PORT_LOG_FILE
+$GPTOKEYB "nblood" -c $GPTOKEYB_CONFIG 2>&1 | tee -a $PORT_LOG_FILE &
 echo "Launch command: ./nblood 2>&1 | tee -a $PORT_LOG_FILE" | tee -a $PORT_LOG_FILE
 ./nblood 2>&1 | tee -a $PORT_LOG_FILE
 

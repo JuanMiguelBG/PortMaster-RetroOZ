@@ -31,8 +31,8 @@ fi
 $ESUDO chmod 666 /dev/tty1
 $ESUDO chmod 666 /dev/uinput
 
-echo "GPTOKEYB command: $GPTOKEYB \"$AppToLaunch\" -c \"./Invaders.gptk\" &" | tee -a $PORT_LOG_FILE
-$GPTOKEYB "$AppToLaunch" -c "./Invaders.gptk" &
+echo "GPTOKEYB command: $GPTOKEYB \"$AppToLaunch\" -c \"./Invaders.gptk\" 2>&1 | tee -a $PORT_LOG_FILE &" | tee -a $PORT_LOG_FILE
+$GPTOKEYB "$AppToLaunch" -c "./Invaders.gptk" 2>&1 | tee -a $PORT_LOG_FILE &
 echo "Launch command: SDL_GAMECONTROLLERCONFIG=\"$sdl_controllerconfig\" ./bin/$AppToLaunch 2>&1 | tee -a $PORT_LOG_FILE" | tee -a $PORT_LOG_FILE
 SDL_GAMECONTROLLERCONFIG="$sdl_controllerconfig" ./bin/$AppToLaunch 2>&1 | tee -a $PORT_LOG_FILE
 

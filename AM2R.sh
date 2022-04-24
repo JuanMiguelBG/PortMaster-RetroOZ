@@ -32,8 +32,8 @@ if [ "$is_RetroOZ" -eq 1 ]; then
   echo "gptokeyb_params: $gptokeyb_params" | tee -a $PORT_LOG_FILE
 fi
 
-echo "GPTOKEYB command: $GPTOKEYB \"gmloader\" -c \"./am2r.gptk\" $gptokeyb_params 2>&1 | tee -a $PORT_LOG_FILE &" | tee -a $PORT_LOG_FILE
-$GPTOKEYB "gmloader" -c "./am2r.gptk" $gptokeyb_params 2>&1 | tee -a $PORT_LOG_FILE &
+echo "GPTOKEYB command: $GPTOKEYB \"gmloader\" -c \"./am2r.gptk\" 2>&1 | tee -a $PORT_LOG_FILE &" | tee -a $PORT_LOG_FILE
+$GPTOKEYB "gmloader" -c "./am2r.gptk" 2>&1 | tee -a $PORT_LOG_FILE &
 echo "Launch command: ./gmloader gamedata/am2r.apk 2>&1 | tee -a $PORT_LOG_FILE" | tee -a $PORT_LOG_FILE
 ./gmloader gamedata/am2r.apk 2>&1 | tee -a $PORT_LOG_FILE
 

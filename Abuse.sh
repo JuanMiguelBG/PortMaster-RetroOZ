@@ -48,10 +48,11 @@ ln -sfv /$GAMEDIR/conf/.abuse ~/
 $ESUDO chmod 666 /dev/tty1
 $ESUDO chmod 666 /dev/uinput
 
-echo "GPTOKEYB command: $GPTOKEYB \"abuse\" -c \"$GAMEDIR/$GPTOKEYB_CONFIG\" &" | tee -a $PORT_LOG_FILE
-$GPTOKEYB "abuse" -c "$GAMEDIR/$GPTOKEYB_CONFIG" &
+echo "GPTOKEYB command: $GPTOKEYB \"abuse\" -c \"$GAMEDIR/$GPTOKEYB_CONFIG\" 2>&1 | tee -a $PORT_LOG_FILE &" | tee -a $PORT_LOG_FILE
+$GPTOKEYB "abuse" -c "$GAMEDIR/$GPTOKEYB_CONFIG" 2>&1 | tee -a $PORT_LOG_FILE &
 echo "Launch command: SDL_GAMECONTROLLERCONFIG=\"$sdl_controllerconfig\" ./abuse 2>&1 | tee -a $PORT_LOG_FILE" | tee -a $PORT_LOG_FILE
 SDL_GAMECONTROLLERCONFIG="$sdl_controllerconfig" ./abuse 2>&1 | tee -a $PORT_LOG_FILE
+
 $ESUDO kill -9 $(pidof gptokeyb)
 $ESUDO systemctl restart $oga_events &
 

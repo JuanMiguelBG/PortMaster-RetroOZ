@@ -25,8 +25,8 @@ cd $GAMEDIR
 $ESUDO chmod 666 /dev/tty1
 $ESUDO chmod 666 /dev/uinput
 
-echo "GPTOKEYB command: $GPTOKEYB \"exult\" $HOTKEY -c \"./exult.$ANALOGSTICKS.gptk\" &" | tee -a $PORT_LOG_FILE
-$GPTOKEYB "exult" $HOTKEY -c "./exult.$ANALOGSTICKS.gptk" &
+echo "GPTOKEYB command: $GPTOKEYB \"exult\" $HOTKEY -c \"./exult.$ANALOGSTICKS.gptk\" 2>&1 | tee -a $PORT_LOG_FILE &" | tee -a $PORT_LOG_FILE
+$GPTOKEYB "exult" $HOTKEY -c "./exult.$ANALOGSTICKS.gptk" 2>&1 | tee -a $PORT_LOG_FILE &
 echo "Launch command: LD_LIBRARY_PATH=\"$PWD/libs\" ./exult -c \"$PWD/exult.keyring.cfg\" 2>&1 | tee -a $PORT_LOG_FILE" | tee -a $PORT_LOG_FILE
 LD_LIBRARY_PATH="$PWD/libs" ./exult -c "$PWD/exult.keyring.cfg" 2>&1 | tee -a $PORT_LOG_FILE
 

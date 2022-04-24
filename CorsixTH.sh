@@ -31,8 +31,8 @@ cd /$directory/ports/CorsixTH
 $ESUDO chmod 666 /dev/tty1
 $ESUDO chmod 666 /dev/uinput
 
-echo "GPTOKEYB command: $GPTOKEYB \"corsix-th\" -c \"./$GPTOKEYB_CONFIG\" &" | tee -a $PORT_LOG_FILE
-$GPTOKEYB "corsix-th" -c "./$GPTOKEYB_CONFIG" &
+echo "GPTOKEYB command: $GPTOKEYB \"corsix-th\" -c \"./$GPTOKEYB_CONFIG\" 2>&1 | tee -a $PORT_LOG_FILE &" | tee -a $PORT_LOG_FILE
+$GPTOKEYB "corsix-th" -c "./$GPTOKEYB_CONFIG" 2>&1 | tee -a $PORT_LOG_FILE &
 echo "Launch command: LD_LIBRARY_PATH=\"$PWD/libs\" SDL_GAMECONTROLLERCONFIG=\"$sdl_controllerconfig\" ./corsix-th --interpreter=\"$PWD/CorsixTH.lua\" 2>&1 | tee -a $PORT_LOG_FILE" | tee -a $PORT_LOG_FILE
 LD_LIBRARY_PATH="$PWD/libs" SDL_GAMECONTROLLERCONFIG="$sdl_controllerconfig" ./corsix-th --interpreter="$PWD/CorsixTH.lua" 2>&1 | tee -a $PORT_LOG_FILE
 

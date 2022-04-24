@@ -68,7 +68,6 @@ if [ ! -f 'bin32/Chowdren' ]; then
 	fi
 fi
 
-gptokeyb_params=""
 if [ "$is_RetroOZ" -eq 1 ]; then
   export LD_LIBRARY_PATH=$GAMEDIR/box86/lib:/usr/lib32:$GAMEDIR/box86/native
   export BOX86_LD_LIBRARY_PATH=$GAMEDIR/box86/lib:$GAMEDIR/box86/native:/usr/lib32/:./:lib/:lib32/:x86/
@@ -80,8 +79,8 @@ fi
 rm -f ./gamecontrollerdb.txt
 cp -f $controlfolder/gamecontrollerdb.txt .
 
-echo "GPTOKEYB command: $GPTOKEYB \"box86\" -c \"$GAMEDIR/iconoclasts.gptk\" $gptokeyb_params 2>&1 | tee -a $PORT_LOG_FILE &" | tee -a $PORT_LOG_FILE
-$GPTOKEYB "box86" -c "$GAMEDIR/iconoclasts.gptk" $gptokeyb_params 2>&1 | tee -a $PORT_LOG_FILE &
+echo "GPTOKEYB command: $GPTOKEYB \"box86\" -c \"$GAMEDIR/iconoclasts.gptk\" 2>&1 | tee -a $PORT_LOG_FILE &" | tee -a $PORT_LOG_FILE
+$GPTOKEYB "box86" -c "$GAMEDIR/iconoclasts.gptk" 2>&1 | tee -a $PORT_LOG_FILE &
 echo "Loading, please wait... (might take a while!)" > /dev/tty1
 echo "Launch command: $GAMEDIR/box86/box86 bin32/Chowdren 2>&1 | tee -a $PORT_LOG_FILE" | tee -a $PORT_LOG_FILE
 $GAMEDIR/box86/box86 bin32/Chowdren 2>&1 | tee -a $PORT_LOG_FILE

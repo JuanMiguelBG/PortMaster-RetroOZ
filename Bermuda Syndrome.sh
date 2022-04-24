@@ -26,8 +26,8 @@ $ESUDO chmod 666 /dev/tty1
 if [ $LOWRES == 'N' ]; then
   $ESUDO chmod 666 /dev/uinput
 
-  echo "GPTOKEYB command: $GPTOKEYB \"bs\" &" | tee -a $PORT_LOG_FILE
-  $GPTOKEYB "bs" &
+  echo "GPTOKEYB command: $GPTOKEYB \"bs\" 2>&1 | tee -a $PORT_LOG_FILE &" | tee -a $PORT_LOG_FILE
+  $GPTOKEYB "bs" 2>&1 | tee -a $PORT_LOG_FILE &
   echo "Launch command: SDL_GAMECONTROLLERCONFIG=\"$sdl_controllerconfig\" ./bs --fullscreen --widescreen=4:3 --datapath=\"/roms/ports/bermuda/DATA\" 2>&1 | tee -a $PORT_LOG_FILE" | tee -a $PORT_LOG_FILE
   SDL_GAMECONTROLLERCONFIG="$sdl_controllerconfig" ./bs --fullscreen --widescreen=4:3 --datapath="/roms/ports/bermuda/DATA" 2>&1 | tee -a $PORT_LOG_FILE
 

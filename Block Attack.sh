@@ -26,8 +26,8 @@ ln -sfv /$directory/ports/blockattack/ ~/.local/share
 $ESUDO chmod 666 /dev/tty1
 $ESUDO chmod 666 /dev/uinput
 
-echo "GPTOKEYB command: $GPTOKEYB \"blockattack\" &" | tee -a $PORT_LOG_FILE
-$GPTOKEYB "blockattack" &
+echo "GPTOKEYB command: $GPTOKEYB \"blockattack\" 2>&1 | tee -a $PORT_LOG_FILE &" | tee -a $PORT_LOG_FILE
+$GPTOKEYB "blockattack" 2>&1 | tee -a $PORT_LOG_FILE &
 echo "Launch command: LD_LIBRARY_PATH=\"$PWD/libs\" SDL_GAMECONTROLLERCONFIG=\"$sdl_controllerconfig\" ./blockattack 2>&1 | tee -a $PORT_LOG_FILE" | tee -a $PORT_LOG_FILE
 LD_LIBRARY_PATH="$PWD/libs" SDL_GAMECONTROLLERCONFIG="$sdl_controllerconfig" ./blockattack 2>&1 | tee -a $PORT_LOG_FILE
 

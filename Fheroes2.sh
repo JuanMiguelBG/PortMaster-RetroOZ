@@ -49,8 +49,8 @@ ln -sfv /${CONFIGFOLDER}/save/fheroes2/ ~/.local/share/
 $ESUDO chmod 666 /dev/tty1
 $ESUDO chmod 666 /dev/uinput
 
-echo "GPTOKEYB command: $GPTOKEYB \"fheroes2\" &" | tee -a $PORT_LOG_FILE
-$GPTOKEYB "fheroes2" &
+echo "GPTOKEYB command: $GPTOKEYB \"fheroes2\" 2>&1 | tee -a $PORT_LOG_FILE &" | tee -a $PORT_LOG_FILE
+$GPTOKEYB "fheroes2" 2>&1 | tee -a $PORT_LOG_FILE &
 echo "Launch command: SDL_GAMECONTROLLERCONFIG=\"$sdl_controllerconfig\" ./fheroes2 2>&1 | tee -a $PORT_LOG_FILE" | tee -a $PORT_LOG_FILE
 SDL_GAMECONTROLLERCONFIG="$sdl_controllerconfig" ./fheroes2 2>&1 | tee -a $PORT_LOG_FILE
 
